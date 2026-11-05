@@ -1,5 +1,5 @@
 import sys
-class Grammars:
+class CFG:
     def __init__(self, terminals, variables, productions):
         self.terminals = terminals 
         self.variables = variables
@@ -7,33 +7,47 @@ class Grammars:
 
     def apply_single_product(self, string, index, left):
         if left == True:
-            pass
+            for s in range(len(string)):
+                if string[s] in self.variables:
+                    varArray = self.productions.get(string[s], [])[index]
+                    return string[:s] + varArray + string[s+1:]
+            return string
+        elif left == False:
+            for s in range(1, len(string) + 1):
+                if string[-s] in self.variables:
+                    varArray = self.productions.get(string[-s], [])[index]
+                    rightside = string[-s+1] if -s+1 < 0 else ""
+                    return string[:-s] + varArray + rightside
+            return string
 
 
 
-        
+def read_from_stdin1():
+    terminals = input()
+    terminals = eval(terminals)
 
+    variables = sys.stdin.readline()
+    variables = eval(variables)
 
+    productions = sys.stdin.readline()
+    productions = eval(productions)
 
-    def read_from_stdin1():
-        terminals = input()
-        terminals = eval(terminals)
+    
+    return terminals, variables, productions
 
-        variables = sys.stdin.readline()
-        variables = eval(variables)
+def read_from_stdin1a():
+    terminals, variables, productions = read_from_stdin1()
 
-        productions = sys.stdin.readline()
-        productions = eval(productions)
+    mystring = eval(sys.stdin.readline())
+    rule_num = eval(sys.stdin.readline())
+    left = eval(sys.stdin.readline())
 
-        mystring = sys.stdin.readline()
-        mystring = eval(mystring)
+    return terminals, variables, productions, mystring, rule_num, left
 
-        rule_num = sys.stdin.readline()
-        rule_num = eval(rule_num)
+if __name__ == "__main__":
+    terminals, variables, productions, mystring, rule_num, left = read_from_stdin1a()
 
-        left = sys.stdin.readline()
-        left = eval(left)
+    cfg = CFG(terminals, variables, productions)
 
-        return terminals, variables, productions, mystring, rule_num, left
-
-CFG = Grammars()
+    print(cfg.apply_single_product(mystring, rule_num, left))
+    
