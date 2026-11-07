@@ -22,6 +22,7 @@ class CFG:
 
 
 
+
 def read_from_stdin1():
     terminals = input()
     terminals = eval(terminals)
@@ -48,6 +49,8 @@ if __name__ == "__main__":
     terminals, variables, productions, mystring, rule_num, left = read_from_stdin1a()
 
     cfg = CFG(terminals, variables, productions)
+
+    
 
     print(cfg.apply_single_product(mystring, rule_num, left))
     
